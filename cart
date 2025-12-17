@@ -1,0 +1,21 @@
+
+<button id="cstmVariantId" data-variant-id="{{ product.selected_or_first_available_variant.id }}">Add To Cart</button>
+<script>
+document.querySelector('#cstmVariantId').addEventListener('click',async function(){
+  try{
+    const id = this.dataset.variantId;
+    await fetch('/cart/add.js',{
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({id:id,quantity:1})
+    })
+    const response = await fetch('/?sections=cart-drawer,cart-icon-bubble');
+    const data = await response.json();
+    console.log(data);
+    document.querySelector('cart-drawer').outerHTML = data['cart-drawer']; 
+    document.querySelector('#cart-icon-bubble').innerHTML = data['cart-icon-bubble'];
+  }catch(error){
+    console.log("error",error);
+  }
+})
+</script>  
